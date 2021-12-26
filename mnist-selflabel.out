@@ -1,0 +1,2106 @@
+[31m{'setup': 'selflabel', 'use_ema': False, 'confidence_threshold': 0.99, 'criterion': 'confidence-cross-entropy', 'criterion_kwargs': {'apply_class_balancing': True}, 'backbone': 'resnet18', 'num_heads': 1, 'train_db_name': 'mnist', 'val_db_name': 'mnist', 'num_classes': 10, 'augmentation_strategy': 'ours', 'augmentation_kwargs': {'crop_size': 28, 'normalize': {'mean': [0.1307, 0.1307, 0.1307], 'std': [0.3081, 0.3081, 0.3081]}, 'num_strong_augs': 4, 'cutout_kwargs': {'n_holes': 1, 'length': 16, 'random': True}}, 'transformation_kwargs': {'crop_size': 28, 'normalize': {'mean': [0.1307, 0.1307, 0.1307], 'std': [0.3081, 0.3081, 0.3081]}}, 'epochs': 200, 'optimizer': 'adam', 'optimizer_kwargs': {'lr': 0.0001, 'weight_decay': 0.0001}, 'batch_size': 1000, 'num_workers': 8, 'scheduler': 'constant', 'pretext_dir': 'output/mnist/pretext', 'pretext_checkpoint': 'output/mnist/pretext/checkpoint.pth.tar', 'pretext_model': 'output/mnist/pretext/model.pth.tar', 'topk_neighbors_train_path': 'output/mnist/pretext/topk-train-neighbors.npy', 'topk_neighbors_val_path': 'output/mnist/pretext/topk-val-neighbors.npy', 'scan_dir': 'output/mnist/scan', 'scan_checkpoint': 'output/mnist/scan/checkpoint.pth.tar', 'scan_model': 'output/mnist/scan/model.pth.tar', 'selflabel_dir': 'output/mnist/selflabel', 'selflabel_checkpoint': 'output/mnist/selflabel/checkpoint.pth.tar', 'selflabel_model': 'output/mnist/selflabel/model.pth.tar'}[0m
+[34mRetrieve model[0m
+ClusteringModel(
+  (backbone): ResNet(
+    (conv1): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (layer1): Sequential(
+      (0): BasicBlock(
+        (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential()
+      )
+      (1): BasicBlock(
+        (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential()
+      )
+    )
+    (layer2): Sequential(
+      (0): BasicBlock(
+        (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential(
+          (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+          (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BasicBlock(
+        (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential()
+      )
+    )
+    (layer3): Sequential(
+      (0): BasicBlock(
+        (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential(
+          (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+          (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BasicBlock(
+        (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential()
+      )
+    )
+    (layer4): Sequential(
+      (0): BasicBlock(
+        (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential(
+          (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+          (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+      )
+      (1): BasicBlock(
+        (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+        (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (shortcut): Sequential()
+      )
+    )
+    (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
+  )
+  (cluster_head): ModuleList(
+    (0): Linear(in_features=512, out_features=10, bias=True)
+  )
+)
+[34mGet loss[0m
+ConfidenceBasedCE(
+  (loss): MaskedCrossEntropyLoss()
+  (softmax): Softmax(dim=1)
+)
+[34mSet CuDNN benchmark[0m
+[34mRetrieve optimizer[0m
+Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    eps: 1e-08
+    lr: 0.0001
+    weight_decay: 0.0001
+)
+[34mRetrieve dataset[0m
+[33mTrain samples 60000 - Val samples 10000[0m
+[34mNo checkpoint file at output/mnist/selflabel/checkpoint.pth.tar[0m
+[34mStarting main loop[0m
+[33mEpoch 1/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [0][ 0/60]	Loss 3.1478e-02 (3.1478e-02)
+Epoch: [0][25/60]	Loss 3.9693e-02 (3.6898e-02)
+Epoch: [0][50/60]	Loss 2.7781e-02 (3.7304e-02)
+Evaluate ...
+{'ACC': 0.9699, 'ARI': 0.9358422042574115, 'NMI': 0.9357778757938375, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 2/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [1][ 0/60]	Loss 4.9101e-02 (4.9101e-02)
+Epoch: [1][25/60]	Loss 3.6444e-02 (4.0296e-02)
+Epoch: [1][50/60]	Loss 3.4594e-02 (3.8636e-02)
+Evaluate ...
+{'ACC': 0.9722, 'ARI': 0.9405777200572133, 'NMI': 0.9399825606599538, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 3/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [2][ 0/60]	Loss 3.2994e-02 (3.2994e-02)
+Epoch: [2][25/60]	Loss 5.9590e-02 (4.1910e-02)
+Epoch: [2][50/60]	Loss 4.8021e-02 (3.9893e-02)
+Evaluate ...
+{'ACC': 0.9742, 'ARI': 0.9445676564144938, 'NMI': 0.9428369202536536, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 4/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [3][ 0/60]	Loss 3.1285e-02 (3.1285e-02)
+Epoch: [3][25/60]	Loss 4.7247e-02 (3.8300e-02)
+Epoch: [3][50/60]	Loss 3.1546e-02 (3.7182e-02)
+Evaluate ...
+{'ACC': 0.9762, 'ARI': 0.9487635412865549, 'NMI': 0.947180386940484, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 5/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [4][ 0/60]	Loss 2.9634e-02 (2.9634e-02)
+Epoch: [4][25/60]	Loss 5.0374e-02 (4.2058e-02)
+Epoch: [4][50/60]	Loss 4.4582e-02 (3.9310e-02)
+Evaluate ...
+{'ACC': 0.9758, 'ARI': 0.9478920581307901, 'NMI': 0.9448198065831466, 'ACC Top-5': 0.9997, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 6/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [5][ 0/60]	Loss 3.9253e-02 (3.9253e-02)
+Epoch: [5][25/60]	Loss 3.3453e-02 (3.9356e-02)
+Epoch: [5][50/60]	Loss 3.7385e-02 (3.9637e-02)
+Evaluate ...
+{'ACC': 0.9733, 'ARI': 0.9429646450843416, 'NMI': 0.9431408983373074, 'ACC Top-5': 0.9997, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 7/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [6][ 0/60]	Loss 3.4574e-02 (3.4574e-02)
+Epoch: [6][25/60]	Loss 3.2873e-02 (3.9128e-02)
+Epoch: [6][50/60]	Loss 4.7935e-02 (4.0407e-02)
+Evaluate ...
+{'ACC': 0.9793, 'ARI': 0.9551445293374808, 'NMI': 0.9516754875605594, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 8/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [7][ 0/60]	Loss 3.0636e-02 (3.0636e-02)
+Epoch: [7][25/60]	Loss 2.9853e-02 (4.0988e-02)
+Epoch: [7][50/60]	Loss 3.5203e-02 (4.0666e-02)
+Evaluate ...
+{'ACC': 0.9755, 'ARI': 0.9471265099462178, 'NMI': 0.9459845878969649, 'ACC Top-5': 0.9997, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 9/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [8][ 0/60]	Loss 3.5951e-02 (3.5951e-02)
+Epoch: [8][25/60]	Loss 4.7182e-02 (4.1250e-02)
+Epoch: [8][50/60]	Loss 4.6729e-02 (4.2334e-02)
+Evaluate ...
+{'ACC': 0.9735, 'ARI': 0.9438680504084905, 'NMI': 0.9471151757992671, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 10/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [9][ 0/60]	Loss 5.0213e-02 (5.0213e-02)
+Epoch: [9][25/60]	Loss 4.2833e-02 (4.4011e-02)
+Epoch: [9][50/60]	Loss 4.1161e-02 (4.2189e-02)
+Evaluate ...
+{'ACC': 0.973, 'ARI': 0.9426578814499282, 'NMI': 0.9464462549709056, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 11/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [10][ 0/60]	Loss 5.9741e-02 (5.9741e-02)
+Epoch: [10][25/60]	Loss 3.7130e-02 (4.1760e-02)
+Epoch: [10][50/60]	Loss 6.3686e-02 (4.3863e-02)
+Evaluate ...
+{'ACC': 0.9753, 'ARI': 0.9478243025908262, 'NMI': 0.9521419420338799, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 12/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [11][ 0/60]	Loss 4.5625e-02 (4.5625e-02)
+Epoch: [11][25/60]	Loss 2.2314e-02 (3.9765e-02)
+Epoch: [11][50/60]	Loss 4.9377e-02 (3.9302e-02)
+Evaluate ...
+{'ACC': 0.9726, 'ARI': 0.9419721244265364, 'NMI': 0.9466761189504801, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 13/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [12][ 0/60]	Loss 4.0566e-02 (4.0566e-02)
+Epoch: [12][25/60]	Loss 2.5370e-02 (3.9683e-02)
+Epoch: [12][50/60]	Loss 6.2993e-02 (3.9975e-02)
+Evaluate ...
+{'ACC': 0.9708, 'ARI': 0.938017181558716, 'NMI': 0.9419143292790317, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 14/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [13][ 0/60]	Loss 3.5751e-02 (3.5751e-02)
+Epoch: [13][25/60]	Loss 5.5795e-02 (4.1008e-02)
+Epoch: [13][50/60]	Loss 3.6239e-02 (3.9872e-02)
+Evaluate ...
+{'ACC': 0.9721, 'ARI': 0.9410581025209802, 'NMI': 0.946969166359826, 'ACC Top-5': 0.9991, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 15/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [14][ 0/60]	Loss 3.3895e-02 (3.3895e-02)
+Epoch: [14][25/60]	Loss 5.7385e-02 (4.0636e-02)
+Epoch: [14][50/60]	Loss 3.3129e-02 (4.0221e-02)
+Evaluate ...
+{'ACC': 0.9707, 'ARI': 0.9380235549645065, 'NMI': 0.9453206744176291, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 16/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [15][ 0/60]	Loss 5.7824e-02 (5.7824e-02)
+Epoch: [15][25/60]	Loss 2.4840e-02 (4.4593e-02)
+Epoch: [15][50/60]	Loss 6.1901e-02 (4.3188e-02)
+Evaluate ...
+{'ACC': 0.9747, 'ARI': 0.9465610534751994, 'NMI': 0.9506786165773492, 'ACC Top-5': 0.9997, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 17/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [16][ 0/60]	Loss 3.4014e-02 (3.4014e-02)
+Epoch: [16][25/60]	Loss 3.9379e-02 (4.1668e-02)
+Epoch: [16][50/60]	Loss 7.1854e-02 (4.3729e-02)
+Evaluate ...
+{'ACC': 0.9725, 'ARI': 0.9418733469988565, 'NMI': 0.9468791578956214, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 18/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [17][ 0/60]	Loss 4.4469e-02 (4.4469e-02)
+Epoch: [17][25/60]	Loss 3.2832e-02 (4.0657e-02)
+Epoch: [17][50/60]	Loss 3.2217e-02 (3.9677e-02)
+Evaluate ...
+{'ACC': 0.9707, 'ARI': 0.9378445333069494, 'NMI': 0.9439499762904489, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 19/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [18][ 0/60]	Loss 3.0892e-02 (3.0892e-02)
+Epoch: [18][25/60]	Loss 4.9498e-02 (4.2194e-02)
+Epoch: [18][50/60]	Loss 5.1213e-02 (4.1115e-02)
+Evaluate ...
+{'ACC': 0.9716, 'ARI': 0.9401266548526884, 'NMI': 0.9444843136717302, 'ACC Top-5': 0.9998, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 20/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [19][ 0/60]	Loss 4.9942e-02 (4.9942e-02)
+Epoch: [19][25/60]	Loss 5.9665e-02 (4.3686e-02)
+Epoch: [19][50/60]	Loss 6.3931e-02 (4.3845e-02)
+Evaluate ...
+{'ACC': 0.9719, 'ARI': 0.9406690133815553, 'NMI': 0.945448170066125, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 21/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [20][ 0/60]	Loss 3.3855e-02 (3.3855e-02)
+Epoch: [20][25/60]	Loss 5.1461e-02 (4.5218e-02)
+Epoch: [20][50/60]	Loss 3.7985e-02 (4.3749e-02)
+Evaluate ...
+{'ACC': 0.9672, 'ARI': 0.9305162591084712, 'NMI': 0.940268743679753, 'ACC Top-5': 0.9995, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 22/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [21][ 0/60]	Loss 2.4642e-02 (2.4642e-02)
+Epoch: [21][25/60]	Loss 6.0320e-02 (4.2929e-02)
+Epoch: [21][50/60]	Loss 3.8666e-02 (4.2421e-02)
+Evaluate ...
+{'ACC': 0.9673, 'ARI': 0.9312910542909477, 'NMI': 0.9408225859655924, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 23/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [22][ 0/60]	Loss 4.0001e-02 (4.0001e-02)
+Epoch: [22][25/60]	Loss 4.4076e-02 (4.5083e-02)
+Epoch: [22][50/60]	Loss 3.9511e-02 (4.3176e-02)
+Evaluate ...
+{'ACC': 0.971, 'ARI': 0.9386271454992772, 'NMI': 0.9446973074114327, 'ACC Top-5': 0.9995, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 24/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [23][ 0/60]	Loss 6.1190e-02 (6.1190e-02)
+Epoch: [23][25/60]	Loss 3.5738e-02 (4.0754e-02)
+Epoch: [23][50/60]	Loss 2.6076e-02 (4.1025e-02)
+Evaluate ...
+{'ACC': 0.9659, 'ARI': 0.9285447433572749, 'NMI': 0.9397605507684473, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 25/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [24][ 0/60]	Loss 6.2050e-02 (6.2050e-02)
+Epoch: [24][25/60]	Loss 2.1908e-02 (4.6042e-02)
+Epoch: [24][50/60]	Loss 3.4789e-02 (4.2493e-02)
+Evaluate ...
+{'ACC': 0.9701, 'ARI': 0.9365605391803677, 'NMI': 0.9441006888521577, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 26/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [25][ 0/60]	Loss 4.7321e-02 (4.7321e-02)
+Epoch: [25][25/60]	Loss 3.3786e-02 (4.1810e-02)
+Epoch: [25][50/60]	Loss 5.1431e-02 (4.1879e-02)
+Evaluate ...
+{'ACC': 0.9683, 'ARI': 0.9333907447974256, 'NMI': 0.942307065758841, 'ACC Top-5': 0.9978, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 27/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [26][ 0/60]	Loss 4.8548e-02 (4.8548e-02)
+Epoch: [26][25/60]	Loss 4.4894e-02 (4.2320e-02)
+Epoch: [26][50/60]	Loss 5.0697e-02 (3.9769e-02)
+Evaluate ...
+{'ACC': 0.9696, 'ARI': 0.935813713041147, 'NMI': 0.942590300151454, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 28/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [27][ 0/60]	Loss 3.0372e-02 (3.0372e-02)
+Epoch: [27][25/60]	Loss 7.5345e-02 (4.2893e-02)
+Epoch: [27][50/60]	Loss 3.3000e-02 (4.1835e-02)
+Evaluate ...
+{'ACC': 0.9655, 'ARI': 0.927920116080097, 'NMI': 0.9382645441913078, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 29/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [28][ 0/60]	Loss 3.1806e-02 (3.1806e-02)
+Epoch: [28][25/60]	Loss 2.7564e-02 (4.2278e-02)
+Epoch: [28][50/60]	Loss 3.9624e-02 (4.2365e-02)
+Evaluate ...
+{'ACC': 0.9714, 'ARI': 0.9397113698611633, 'NMI': 0.946748227097056, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 30/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [29][ 0/60]	Loss 3.6817e-02 (3.6817e-02)
+Epoch: [29][25/60]	Loss 4.5165e-02 (4.0714e-02)
+Epoch: [29][50/60]	Loss 4.1169e-02 (4.0638e-02)
+Evaluate ...
+{'ACC': 0.9456, 'ARI': 0.8960792438737182, 'NMI': 0.9257500743652876, 'ACC Top-5': 0.9974, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 31/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [30][ 0/60]	Loss 3.7098e-02 (3.7098e-02)
+Epoch: [30][25/60]	Loss 3.9507e-02 (4.4106e-02)
+Epoch: [30][50/60]	Loss 2.9389e-02 (4.4960e-02)
+Evaluate ...
+{'ACC': 0.941, 'ARI': 0.8893589912390415, 'NMI': 0.9235812003061967, 'ACC Top-5': 0.9989, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 32/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [31][ 0/60]	Loss 3.5171e-02 (3.5171e-02)
+Epoch: [31][25/60]	Loss 6.0734e-02 (4.6509e-02)
+Epoch: [31][50/60]	Loss 3.8947e-02 (4.6302e-02)
+Evaluate ...
+{'ACC': 0.9554, 'ARI': 0.9105323719694186, 'NMI': 0.9317047955417848, 'ACC Top-5': 0.9989, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 33/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [32][ 0/60]	Loss 5.5994e-02 (5.5994e-02)
+Epoch: [32][25/60]	Loss 5.6200e-02 (4.5186e-02)
+Epoch: [32][50/60]	Loss 3.9820e-02 (4.5139e-02)
+Evaluate ...
+{'ACC': 0.9521, 'ARI': 0.9048283790466215, 'NMI': 0.9272265430234699, 'ACC Top-5': 0.9982, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 34/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [33][ 0/60]	Loss 5.2190e-02 (5.2190e-02)
+Epoch: [33][25/60]	Loss 3.6219e-02 (4.3646e-02)
+Epoch: [33][50/60]	Loss 3.9458e-02 (4.3488e-02)
+Evaluate ...
+{'ACC': 0.9494, 'ARI': 0.9015055126203213, 'NMI': 0.928929899019885, 'ACC Top-5': 0.9964, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 35/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [34][ 0/60]	Loss 3.8551e-02 (3.8551e-02)
+Epoch: [34][25/60]	Loss 4.0096e-02 (4.0690e-02)
+Epoch: [34][50/60]	Loss 4.6802e-02 (4.3529e-02)
+Evaluate ...
+{'ACC': 0.9473, 'ARI': 0.8984364504957433, 'NMI': 0.927950252031752, 'ACC Top-5': 0.9986, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 36/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [35][ 0/60]	Loss 7.5431e-02 (7.5431e-02)
+Epoch: [35][25/60]	Loss 3.0390e-02 (4.7503e-02)
+Epoch: [35][50/60]	Loss 4.4627e-02 (4.7317e-02)
+Evaluate ...
+{'ACC': 0.9443, 'ARI': 0.894506640051691, 'NMI': 0.9259017572155904, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 37/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [36][ 0/60]	Loss 4.8861e-02 (4.8861e-02)
+Epoch: [36][25/60]	Loss 5.6542e-02 (4.4020e-02)
+Epoch: [36][50/60]	Loss 5.0199e-02 (4.4198e-02)
+Evaluate ...
+{'ACC': 0.9381, 'ARI': 0.8869344529191986, 'NMI': 0.9245237152620276, 'ACC Top-5': 0.9988, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 38/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [37][ 0/60]	Loss 5.2904e-02 (5.2904e-02)
+Epoch: [37][25/60]	Loss 4.9592e-02 (4.5980e-02)
+Epoch: [37][50/60]	Loss 3.3998e-02 (4.5201e-02)
+Evaluate ...
+{'ACC': 0.9483, 'ARI': 0.8995324436266138, 'NMI': 0.9264915422853441, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 39/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [38][ 0/60]	Loss 4.1248e-02 (4.1248e-02)
+Epoch: [38][25/60]	Loss 4.8842e-02 (4.5686e-02)
+Epoch: [38][50/60]	Loss 5.1646e-02 (4.4130e-02)
+Evaluate ...
+{'ACC': 0.9368, 'ARI': 0.8840462723948307, 'NMI': 0.9223657738417971, 'ACC Top-5': 0.997, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 40/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [39][ 0/60]	Loss 4.8083e-02 (4.8083e-02)
+Epoch: [39][25/60]	Loss 5.1972e-02 (4.3787e-02)
+Epoch: [39][50/60]	Loss 3.2714e-02 (4.2991e-02)
+Evaluate ...
+{'ACC': 0.9409, 'ARI': 0.8882334507380085, 'NMI': 0.9231862131665272, 'ACC Top-5': 0.9942, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 41/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [40][ 0/60]	Loss 3.8521e-02 (3.8521e-02)
+Epoch: [40][25/60]	Loss 3.1169e-02 (4.2086e-02)
+Epoch: [40][50/60]	Loss 4.0524e-02 (4.2074e-02)
+Evaluate ...
+{'ACC': 0.9385, 'ARI': 0.8856851544512051, 'NMI': 0.9207072737122464, 'ACC Top-5': 0.9986, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 42/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [41][ 0/60]	Loss 5.8475e-02 (5.8475e-02)
+Epoch: [41][25/60]	Loss 5.5191e-02 (4.7198e-02)
+Epoch: [41][50/60]	Loss 4.6033e-02 (4.6051e-02)
+Evaluate ...
+{'ACC': 0.9343, 'ARI': 0.8813117698990098, 'NMI': 0.9197295462641548, 'ACC Top-5': 0.9973, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 43/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [42][ 0/60]	Loss 4.9833e-02 (4.9833e-02)
+Epoch: [42][25/60]	Loss 4.0281e-02 (4.4389e-02)
+Epoch: [42][50/60]	Loss 3.9371e-02 (4.5547e-02)
+Evaluate ...
+{'ACC': 0.9362, 'ARI': 0.882485070796694, 'NMI': 0.9181638013187997, 'ACC Top-5': 0.9985, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 44/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [43][ 0/60]	Loss 3.3403e-02 (3.3403e-02)
+Epoch: [43][25/60]	Loss 6.6443e-02 (4.6081e-02)
+Epoch: [43][50/60]	Loss 3.8677e-02 (4.5999e-02)
+Evaluate ...
+{'ACC': 0.9341, 'ARI': 0.8800281044725369, 'NMI': 0.9182617919260858, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 45/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [44][ 0/60]	Loss 5.3580e-02 (5.3580e-02)
+Epoch: [44][25/60]	Loss 5.0210e-02 (4.8552e-02)
+Epoch: [44][50/60]	Loss 4.1536e-02 (4.7388e-02)
+Evaluate ...
+{'ACC': 0.9397, 'ARI': 0.8872869988598875, 'NMI': 0.9199645116475493, 'ACC Top-5': 0.9984, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 46/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [45][ 0/60]	Loss 5.5904e-02 (5.5904e-02)
+Epoch: [45][25/60]	Loss 3.3204e-02 (4.5280e-02)
+Epoch: [45][50/60]	Loss 6.1141e-02 (4.6084e-02)
+Evaluate ...
+{'ACC': 0.9377, 'ARI': 0.8858920933448302, 'NMI': 0.9211937059446795, 'ACC Top-5': 0.9982, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 47/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [46][ 0/60]	Loss 4.5244e-02 (4.5244e-02)
+Epoch: [46][25/60]	Loss 5.5055e-02 (5.0357e-02)
+Epoch: [46][50/60]	Loss 4.3346e-02 (4.6059e-02)
+Evaluate ...
+{'ACC': 0.9404, 'ARI': 0.8876723269917314, 'NMI': 0.919848622908025, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 48/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [47][ 0/60]	Loss 4.4966e-02 (4.4966e-02)
+Epoch: [47][25/60]	Loss 3.4000e-02 (4.4479e-02)
+Epoch: [47][50/60]	Loss 3.9836e-02 (4.4913e-02)
+Evaluate ...
+{'ACC': 0.9335, 'ARI': 0.8805686637602197, 'NMI': 0.9196341938576256, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 49/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [48][ 0/60]	Loss 6.8514e-02 (6.8514e-02)
+Epoch: [48][25/60]	Loss 4.4130e-02 (4.7460e-02)
+Epoch: [48][50/60]	Loss 6.6130e-02 (4.6479e-02)
+Evaluate ...
+{'ACC': 0.9412, 'ARI': 0.8901145813984632, 'NMI': 0.9239967182379526, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 50/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [49][ 0/60]	Loss 5.7961e-02 (5.7961e-02)
+Epoch: [49][25/60]	Loss 6.2045e-02 (4.4628e-02)
+Epoch: [49][50/60]	Loss 4.2951e-02 (4.3853e-02)
+Evaluate ...
+{'ACC': 0.9475, 'ARI': 0.8999209538827707, 'NMI': 0.9284739138060849, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 51/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [50][ 0/60]	Loss 4.6748e-02 (4.6748e-02)
+Epoch: [50][25/60]	Loss 4.5672e-02 (4.3018e-02)
+Epoch: [50][50/60]	Loss 2.2919e-02 (4.3812e-02)
+Evaluate ...
+{'ACC': 0.9345, 'ARI': 0.8837094210329675, 'NMI': 0.924737401014589, 'ACC Top-5': 0.9983, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 52/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [51][ 0/60]	Loss 5.6486e-02 (5.6486e-02)
+Epoch: [51][25/60]	Loss 5.3216e-02 (4.6266e-02)
+Epoch: [51][50/60]	Loss 6.2334e-02 (4.5301e-02)
+Evaluate ...
+{'ACC': 0.9461, 'ARI': 0.8970770940927876, 'NMI': 0.9263760901562117, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 53/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [52][ 0/60]	Loss 3.9192e-02 (3.9192e-02)
+Epoch: [52][25/60]	Loss 4.8706e-02 (4.2718e-02)
+Epoch: [52][50/60]	Loss 3.9367e-02 (4.2374e-02)
+Evaluate ...
+{'ACC': 0.941, 'ARI': 0.8905533014008318, 'NMI': 0.9241877920365039, 'ACC Top-5': 0.9981, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 54/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [53][ 0/60]	Loss 3.8318e-02 (3.8318e-02)
+Epoch: [53][25/60]	Loss 4.6132e-02 (4.5306e-02)
+Epoch: [53][50/60]	Loss 4.5968e-02 (4.5292e-02)
+Evaluate ...
+{'ACC': 0.9448, 'ARI': 0.895039876799824, 'NMI': 0.9267101547877674, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 55/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [54][ 0/60]	Loss 5.5830e-02 (5.5830e-02)
+Epoch: [54][25/60]	Loss 3.8755e-02 (4.4953e-02)
+Epoch: [54][50/60]	Loss 5.5088e-02 (4.5092e-02)
+Evaluate ...
+{'ACC': 0.9464, 'ARI': 0.8974984240487025, 'NMI': 0.9290367347543785, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 56/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [55][ 0/60]	Loss 2.8394e-02 (2.8394e-02)
+Epoch: [55][25/60]	Loss 5.5860e-02 (4.3147e-02)
+Epoch: [55][50/60]	Loss 4.8642e-02 (4.5209e-02)
+Evaluate ...
+{'ACC': 0.94, 'ARI': 0.8881535448259271, 'NMI': 0.9228382279719923, 'ACC Top-5': 0.9995, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 57/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [56][ 0/60]	Loss 3.5106e-02 (3.5106e-02)
+Epoch: [56][25/60]	Loss 4.3276e-02 (4.2794e-02)
+Epoch: [56][50/60]	Loss 2.4719e-02 (4.3037e-02)
+Evaluate ...
+{'ACC': 0.9458, 'ARI': 0.8966618384568185, 'NMI': 0.9282561445910137, 'ACC Top-5': 0.9959, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 58/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [57][ 0/60]	Loss 5.3567e-02 (5.3567e-02)
+Epoch: [57][25/60]	Loss 4.2704e-02 (4.5305e-02)
+Epoch: [57][50/60]	Loss 4.0227e-02 (4.3881e-02)
+Evaluate ...
+{'ACC': 0.9537, 'ARI': 0.908434758507767, 'NMI': 0.931221954469747, 'ACC Top-5': 0.9997, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 59/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [58][ 0/60]	Loss 6.8058e-02 (6.8058e-02)
+Epoch: [58][25/60]	Loss 4.5519e-02 (4.4205e-02)
+Epoch: [58][50/60]	Loss 3.6249e-02 (4.3494e-02)
+Evaluate ...
+{'ACC': 0.9525, 'ARI': 0.9061436134679478, 'NMI': 0.9311523426676843, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 60/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [59][ 0/60]	Loss 3.8148e-02 (3.8148e-02)
+Epoch: [59][25/60]	Loss 4.9142e-02 (4.3876e-02)
+Epoch: [59][50/60]	Loss 3.8675e-02 (4.3451e-02)
+Evaluate ...
+{'ACC': 0.9461, 'ARI': 0.8973074039252287, 'NMI': 0.9260696817140593, 'ACC Top-5': 0.9988, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 61/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [60][ 0/60]	Loss 6.0517e-02 (6.0517e-02)
+Epoch: [60][25/60]	Loss 4.4180e-02 (4.4864e-02)
+Epoch: [60][50/60]	Loss 6.2141e-02 (4.4761e-02)
+Evaluate ...
+{'ACC': 0.9276, 'ARI': 0.8719231828490421, 'NMI': 0.9134360788027727, 'ACC Top-5': 0.9981, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 62/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [61][ 0/60]	Loss 6.9059e-02 (6.9059e-02)
+Epoch: [61][25/60]	Loss 4.1157e-02 (4.6899e-02)
+Epoch: [61][50/60]	Loss 6.7410e-02 (4.6472e-02)
+Evaluate ...
+{'ACC': 0.9423, 'ARI': 0.8907346316393767, 'NMI': 0.9222457104656009, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 63/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [62][ 0/60]	Loss 4.1780e-02 (4.1780e-02)
+Epoch: [62][25/60]	Loss 4.8417e-02 (4.5287e-02)
+Epoch: [62][50/60]	Loss 5.2353e-02 (4.5237e-02)
+Evaluate ...
+{'ACC': 0.9207, 'ARI': 0.8609622741854694, 'NMI': 0.9058963438523839, 'ACC Top-5': 0.9981, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 64/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [63][ 0/60]	Loss 4.6382e-02 (4.6382e-02)
+Epoch: [63][25/60]	Loss 5.0710e-02 (5.1316e-02)
+Epoch: [63][50/60]	Loss 6.7289e-02 (4.9677e-02)
+Evaluate ...
+{'ACC': 0.905, 'ARI': 0.8437904367911745, 'NMI': 0.9015972404340368, 'ACC Top-5': 0.9958, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 65/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [64][ 0/60]	Loss 5.4896e-02 (5.4896e-02)
+Epoch: [64][25/60]	Loss 3.5644e-02 (4.8030e-02)
+Epoch: [64][50/60]	Loss 3.4822e-02 (4.9274e-02)
+Evaluate ...
+{'ACC': 0.8807, 'ARI': 0.825812319119846, 'NMI': 0.8921578948978972, 'ACC Top-5': 0.9946, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 66/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [65][ 0/60]	Loss 6.9693e-02 (6.9693e-02)
+Epoch: [65][25/60]	Loss 3.8805e-02 (4.9431e-02)
+Epoch: [65][50/60]	Loss 3.6855e-02 (4.8981e-02)
+Evaluate ...
+{'ACC': 0.8848, 'ARI': 0.8301313807693836, 'NMI': 0.8968782361339268, 'ACC Top-5': 0.9966, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 67/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [66][ 0/60]	Loss 5.8231e-02 (5.8231e-02)
+Epoch: [66][25/60]	Loss 4.1587e-02 (4.6161e-02)
+Epoch: [66][50/60]	Loss 4.6426e-02 (4.7080e-02)
+Evaluate ...
+{'ACC': 0.8825, 'ARI': 0.8284993658491916, 'NMI': 0.8959020644334916, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 68/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [67][ 0/60]	Loss 5.7922e-02 (5.7922e-02)
+Epoch: [67][25/60]	Loss 4.7960e-02 (5.0363e-02)
+Epoch: [67][50/60]	Loss 6.7313e-02 (4.8389e-02)
+Evaluate ...
+{'ACC': 0.8833, 'ARI': 0.827563473728755, 'NMI': 0.8943716233991128, 'ACC Top-5': 0.9964, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 69/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [68][ 0/60]	Loss 6.8174e-02 (6.8174e-02)
+Epoch: [68][25/60]	Loss 4.6200e-02 (4.6896e-02)
+Epoch: [68][50/60]	Loss 4.2431e-02 (4.8972e-02)
+Evaluate ...
+{'ACC': 0.8757, 'ARI': 0.8250898087943282, 'NMI': 0.8936370928865972, 'ACC Top-5': 0.9959, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 70/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [69][ 0/60]	Loss 6.9199e-02 (6.9199e-02)
+Epoch: [69][25/60]	Loss 2.9557e-02 (4.7532e-02)
+Epoch: [69][50/60]	Loss 5.6417e-02 (4.7472e-02)
+Evaluate ...
+{'ACC': 0.8729, 'ARI': 0.8219975837584462, 'NMI': 0.8902620222682791, 'ACC Top-5': 0.9986, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 71/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [70][ 0/60]	Loss 5.5676e-02 (5.5676e-02)
+Epoch: [70][25/60]	Loss 7.3533e-02 (4.5683e-02)
+Epoch: [70][50/60]	Loss 6.2606e-02 (4.8793e-02)
+Evaluate ...
+{'ACC': 0.8803, 'ARI': 0.8218820693972632, 'NMI': 0.888723386566029, 'ACC Top-5': 0.9921, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 72/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [71][ 0/60]	Loss 5.3203e-02 (5.3203e-02)
+Epoch: [71][25/60]	Loss 5.4784e-02 (4.3807e-02)
+Epoch: [71][50/60]	Loss 3.3679e-02 (4.5444e-02)
+Evaluate ...
+{'ACC': 0.8806, 'ARI': 0.8258373182091554, 'NMI': 0.8931613263781952, 'ACC Top-5': 0.9965, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 73/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [72][ 0/60]	Loss 4.1037e-02 (4.1037e-02)
+Epoch: [72][25/60]	Loss 4.4849e-02 (5.1042e-02)
+Epoch: [72][50/60]	Loss 4.5230e-02 (4.9974e-02)
+Evaluate ...
+{'ACC': 0.8802, 'ARI': 0.8270111371345171, 'NMI': 0.8945002992570177, 'ACC Top-5': 0.9987, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 74/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [73][ 0/60]	Loss 2.7059e-02 (2.7059e-02)
+Epoch: [73][25/60]	Loss 5.0652e-02 (4.6170e-02)
+Epoch: [73][50/60]	Loss 5.8961e-02 (4.7934e-02)
+Evaluate ...
+{'ACC': 0.8748, 'ARI': 0.8230827411563182, 'NMI': 0.8922280952628118, 'ACC Top-5': 0.9973, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 75/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [74][ 0/60]	Loss 4.0720e-02 (4.0720e-02)
+Epoch: [74][25/60]	Loss 3.9240e-02 (4.7018e-02)
+Epoch: [74][50/60]	Loss 5.1090e-02 (4.9509e-02)
+Evaluate ...
+{'ACC': 0.8816, 'ARI': 0.8256253565214718, 'NMI': 0.8917467568392012, 'ACC Top-5': 0.9991, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 76/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [75][ 0/60]	Loss 5.9677e-02 (5.9677e-02)
+Epoch: [75][25/60]	Loss 5.0138e-02 (5.0246e-02)
+Epoch: [75][50/60]	Loss 6.9057e-02 (5.2433e-02)
+Evaluate ...
+{'ACC': 0.8777, 'ARI': 0.8241044177701742, 'NMI': 0.8916081561916165, 'ACC Top-5': 0.9931, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 77/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [76][ 0/60]	Loss 3.4600e-02 (3.4600e-02)
+Epoch: [76][25/60]	Loss 4.4760e-02 (4.8914e-02)
+Epoch: [76][50/60]	Loss 5.4131e-02 (5.0113e-02)
+Evaluate ...
+{'ACC': 0.8786, 'ARI': 0.8252635096065224, 'NMI': 0.8940043950050396, 'ACC Top-5': 0.9961, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 78/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [77][ 0/60]	Loss 4.2378e-02 (4.2378e-02)
+Epoch: [77][25/60]	Loss 4.2738e-02 (5.2516e-02)
+Epoch: [77][50/60]	Loss 6.5294e-02 (5.1992e-02)
+Evaluate ...
+{'ACC': 0.894, 'ARI': 0.8336722241531014, 'NMI': 0.8962334653215719, 'ACC Top-5': 0.9945, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 79/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [78][ 0/60]	Loss 4.8403e-02 (4.8403e-02)
+Epoch: [78][25/60]	Loss 5.8238e-02 (4.7459e-02)
+Epoch: [78][50/60]	Loss 4.4741e-02 (4.5824e-02)
+Evaluate ...
+{'ACC': 0.9018, 'ARI': 0.8405866978819697, 'NMI': 0.899926676274989, 'ACC Top-5': 0.9974, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 80/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [79][ 0/60]	Loss 4.7609e-02 (4.7609e-02)
+Epoch: [79][25/60]	Loss 4.2439e-02 (4.9140e-02)
+Epoch: [79][50/60]	Loss 3.9962e-02 (5.1913e-02)
+Evaluate ...
+{'ACC': 0.8978, 'ARI': 0.8381750809018054, 'NMI': 0.8996793692369698, 'ACC Top-5': 0.9932, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 81/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [80][ 0/60]	Loss 4.3773e-02 (4.3773e-02)
+Epoch: [80][25/60]	Loss 5.9880e-02 (4.8798e-02)
+Epoch: [80][50/60]	Loss 4.7750e-02 (4.8693e-02)
+Evaluate ...
+{'ACC': 0.8868, 'ARI': 0.8315387121078418, 'NMI': 0.8975901936849947, 'ACC Top-5': 0.9948, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 82/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [81][ 0/60]	Loss 5.4610e-02 (5.4610e-02)
+Epoch: [81][25/60]	Loss 4.7855e-02 (4.9138e-02)
+Epoch: [81][50/60]	Loss 4.7151e-02 (4.8389e-02)
+Evaluate ...
+{'ACC': 0.8955, 'ARI': 0.8360453521572231, 'NMI': 0.898281965602439, 'ACC Top-5': 0.9961, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 83/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [82][ 0/60]	Loss 5.7199e-02 (5.7199e-02)
+Epoch: [82][25/60]	Loss 7.3462e-02 (5.0676e-02)
+Epoch: [82][50/60]	Loss 8.0481e-02 (4.9405e-02)
+Evaluate ...
+{'ACC': 0.8866, 'ARI': 0.8291215018347589, 'NMI': 0.8948915394818722, 'ACC Top-5': 0.9958, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 84/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [83][ 0/60]	Loss 5.6316e-02 (5.6316e-02)
+Epoch: [83][25/60]	Loss 4.8820e-02 (5.1389e-02)
+Epoch: [83][50/60]	Loss 4.0838e-02 (5.0699e-02)
+Evaluate ...
+{'ACC': 0.8935, 'ARI': 0.8335349239747869, 'NMI': 0.896708241222415, 'ACC Top-5': 0.9985, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 85/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [84][ 0/60]	Loss 6.4656e-02 (6.4656e-02)
+Epoch: [84][25/60]	Loss 4.5543e-02 (4.8364e-02)
+Epoch: [84][50/60]	Loss 4.7580e-02 (4.7430e-02)
+Evaluate ...
+{'ACC': 0.8881, 'ARI': 0.8298543271803853, 'NMI': 0.8942954535860452, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 86/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [85][ 0/60]	Loss 6.0358e-02 (6.0358e-02)
+Epoch: [85][25/60]	Loss 6.8192e-02 (5.0630e-02)
+Epoch: [85][50/60]	Loss 2.1970e-02 (5.0083e-02)
+Evaluate ...
+{'ACC': 0.8867, 'ARI': 0.8292047072595656, 'NMI': 0.8945412368277027, 'ACC Top-5': 0.9932, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 87/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [86][ 0/60]	Loss 4.7728e-02 (4.7728e-02)
+Epoch: [86][25/60]	Loss 6.3610e-02 (5.0691e-02)
+Epoch: [86][50/60]	Loss 5.7097e-02 (4.9353e-02)
+Evaluate ...
+{'ACC': 0.8939, 'ARI': 0.8344408124567784, 'NMI': 0.8985591642521924, 'ACC Top-5': 0.9982, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 88/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [87][ 0/60]	Loss 3.8668e-02 (3.8668e-02)
+Epoch: [87][25/60]	Loss 5.5949e-02 (5.0397e-02)
+Epoch: [87][50/60]	Loss 6.0930e-02 (4.9922e-02)
+Evaluate ...
+{'ACC': 0.8876, 'ARI': 0.8294698145731344, 'NMI': 0.8948361946393505, 'ACC Top-5': 0.9978, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 89/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [88][ 0/60]	Loss 6.6505e-02 (6.6505e-02)
+Epoch: [88][25/60]	Loss 5.7481e-02 (4.8818e-02)
+Epoch: [88][50/60]	Loss 5.1065e-02 (5.0667e-02)
+Evaluate ...
+{'ACC': 0.9006, 'ARI': 0.8390685310852605, 'NMI': 0.900037724593614, 'ACC Top-5': 0.9988, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 90/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [89][ 0/60]	Loss 3.6113e-02 (3.6113e-02)
+Epoch: [89][25/60]	Loss 3.9687e-02 (5.1286e-02)
+Epoch: [89][50/60]	Loss 6.2553e-02 (5.1243e-02)
+Evaluate ...
+{'ACC': 0.8906, 'ARI': 0.8320434884015717, 'NMI': 0.8968387087870777, 'ACC Top-5': 0.9989, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 91/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [90][ 0/60]	Loss 6.4758e-02 (6.4758e-02)
+Epoch: [90][25/60]	Loss 3.5203e-02 (5.1724e-02)
+Epoch: [90][50/60]	Loss 3.9794e-02 (4.7882e-02)
+Evaluate ...
+{'ACC': 0.9065, 'ARI': 0.844471599905096, 'NMI': 0.9009903711638714, 'ACC Top-5': 0.9997, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 92/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [91][ 0/60]	Loss 3.7700e-02 (3.7700e-02)
+Epoch: [91][25/60]	Loss 6.3912e-02 (4.9102e-02)
+Epoch: [91][50/60]	Loss 2.0228e-02 (4.7701e-02)
+Evaluate ...
+{'ACC': 0.9254, 'ARI': 0.8658547125856484, 'NMI': 0.9102625711107903, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 93/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [92][ 0/60]	Loss 4.9856e-02 (4.9856e-02)
+Epoch: [92][25/60]	Loss 5.3733e-02 (4.5096e-02)
+Epoch: [92][50/60]	Loss 5.4954e-02 (4.5898e-02)
+Evaluate ...
+{'ACC': 0.8994, 'ARI': 0.8401926779822991, 'NMI': 0.9008850702364675, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 94/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [93][ 0/60]	Loss 4.7666e-02 (4.7666e-02)
+Epoch: [93][25/60]	Loss 4.9455e-02 (4.5357e-02)
+Epoch: [93][50/60]	Loss 5.4135e-02 (4.6701e-02)
+Evaluate ...
+{'ACC': 0.9241, 'ARI': 0.8655058223802597, 'NMI': 0.9102455165547634, 'ACC Top-5': 0.9976, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 95/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [94][ 0/60]	Loss 3.2226e-02 (3.2226e-02)
+Epoch: [94][25/60]	Loss 3.9772e-02 (4.4201e-02)
+Epoch: [94][50/60]	Loss 6.0237e-02 (4.5750e-02)
+Evaluate ...
+{'ACC': 0.9312, 'ARI': 0.8774555308048798, 'NMI': 0.917949035657885, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 96/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [95][ 0/60]	Loss 3.5772e-02 (3.5772e-02)
+Epoch: [95][25/60]	Loss 3.0559e-02 (4.2407e-02)
+Epoch: [95][50/60]	Loss 3.0647e-02 (4.2207e-02)
+Evaluate ...
+{'ACC': 0.9393, 'ARI': 0.8879074867558763, 'NMI': 0.9229732806726649, 'ACC Top-5': 0.9982, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 97/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [96][ 0/60]	Loss 4.7135e-02 (4.7135e-02)
+Epoch: [96][25/60]	Loss 3.4860e-02 (4.8826e-02)
+Epoch: [96][50/60]	Loss 4.2635e-02 (4.5838e-02)
+Evaluate ...
+{'ACC': 0.9447, 'ARI': 0.8965741091485164, 'NMI': 0.9300003449632877, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 98/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [97][ 0/60]	Loss 2.9639e-02 (2.9639e-02)
+Epoch: [97][25/60]	Loss 5.3225e-02 (4.4167e-02)
+Epoch: [97][50/60]	Loss 5.4038e-02 (4.3783e-02)
+Evaluate ...
+{'ACC': 0.9329, 'ARI': 0.8812694528751726, 'NMI': 0.9231291528708705, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 99/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [98][ 0/60]	Loss 5.5826e-02 (5.5826e-02)
+Epoch: [98][25/60]	Loss 4.8893e-02 (4.5887e-02)
+Epoch: [98][50/60]	Loss 2.4521e-02 (4.3360e-02)
+Evaluate ...
+{'ACC': 0.9405, 'ARI': 0.8908165807025914, 'NMI': 0.9273895364348838, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 100/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [99][ 0/60]	Loss 3.3196e-02 (3.3196e-02)
+Epoch: [99][25/60]	Loss 2.9326e-02 (4.1683e-02)
+Epoch: [99][50/60]	Loss 4.6648e-02 (4.2703e-02)
+Evaluate ...
+{'ACC': 0.9443, 'ARI': 0.894645401012008, 'NMI': 0.9278122198030063, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 101/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [100][ 0/60]	Loss 2.7147e-02 (2.7147e-02)
+Epoch: [100][25/60]	Loss 3.0576e-02 (4.3167e-02)
+Epoch: [100][50/60]	Loss 6.7536e-02 (4.3462e-02)
+Evaluate ...
+{'ACC': 0.9417, 'ARI': 0.8910282617035714, 'NMI': 0.9254919977466043, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 102/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [101][ 0/60]	Loss 4.7943e-02 (4.7943e-02)
+Epoch: [101][25/60]	Loss 2.8817e-02 (4.2076e-02)
+Epoch: [101][50/60]	Loss 5.5329e-02 (4.2860e-02)
+Evaluate ...
+{'ACC': 0.9442, 'ARI': 0.894274728609185, 'NMI': 0.9285334846622592, 'ACC Top-5': 0.9988, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 103/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [102][ 0/60]	Loss 3.2814e-02 (3.2814e-02)
+Epoch: [102][25/60]	Loss 3.4225e-02 (4.2572e-02)
+Epoch: [102][50/60]	Loss 5.8774e-02 (4.5248e-02)
+Evaluate ...
+{'ACC': 0.9356, 'ARI': 0.8825769294803405, 'NMI': 0.9212033266809685, 'ACC Top-5': 0.9978, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 104/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [103][ 0/60]	Loss 4.9940e-02 (4.9940e-02)
+Epoch: [103][25/60]	Loss 4.4310e-02 (4.5357e-02)
+Epoch: [103][50/60]	Loss 6.5066e-02 (4.6658e-02)
+Evaluate ...
+{'ACC': 0.939, 'ARI': 0.8886205562225012, 'NMI': 0.9261512826145544, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 105/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [104][ 0/60]	Loss 3.7722e-02 (3.7722e-02)
+Epoch: [104][25/60]	Loss 4.7147e-02 (4.4961e-02)
+Epoch: [104][50/60]	Loss 4.0293e-02 (4.4878e-02)
+Evaluate ...
+{'ACC': 0.9375, 'ARI': 0.8863527559080183, 'NMI': 0.9240720746621567, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 106/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [105][ 0/60]	Loss 5.2036e-02 (5.2036e-02)
+Epoch: [105][25/60]	Loss 3.2298e-02 (4.2418e-02)
+Epoch: [105][50/60]	Loss 4.6978e-02 (4.3410e-02)
+Evaluate ...
+{'ACC': 0.9429, 'ARI': 0.8932066307814689, 'NMI': 0.9268493317753835, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 107/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [106][ 0/60]	Loss 2.4434e-02 (2.4434e-02)
+Epoch: [106][25/60]	Loss 3.7155e-02 (4.3765e-02)
+Epoch: [106][50/60]	Loss 5.5848e-02 (4.4910e-02)
+Evaluate ...
+{'ACC': 0.9332, 'ARI': 0.8808132463365865, 'NMI': 0.9208368977192374, 'ACC Top-5': 0.997, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 108/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [107][ 0/60]	Loss 3.9942e-02 (3.9942e-02)
+Epoch: [107][25/60]	Loss 4.8033e-02 (4.4013e-02)
+Epoch: [107][50/60]	Loss 4.3168e-02 (4.4577e-02)
+Evaluate ...
+{'ACC': 0.9403, 'ARI': 0.8891932734951952, 'NMI': 0.9251511716458429, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 109/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [108][ 0/60]	Loss 4.7461e-02 (4.7461e-02)
+Epoch: [108][25/60]	Loss 4.1720e-02 (4.2692e-02)
+Epoch: [108][50/60]	Loss 5.3099e-02 (4.4958e-02)
+Evaluate ...
+{'ACC': 0.9438, 'ARI': 0.8939242819147177, 'NMI': 0.926970367189767, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 110/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [109][ 0/60]	Loss 6.0713e-02 (6.0713e-02)
+Epoch: [109][25/60]	Loss 5.2677e-02 (4.3151e-02)
+Epoch: [109][50/60]	Loss 2.8735e-02 (4.2345e-02)
+Evaluate ...
+{'ACC': 0.9393, 'ARI': 0.8880140172370201, 'NMI': 0.9250404984711691, 'ACC Top-5': 0.9991, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 111/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [110][ 0/60]	Loss 5.0769e-02 (5.0769e-02)
+Epoch: [110][25/60]	Loss 5.2388e-02 (4.2578e-02)
+Epoch: [110][50/60]	Loss 4.4256e-02 (4.4213e-02)
+Evaluate ...
+{'ACC': 0.9377, 'ARI': 0.884597493904027, 'NMI': 0.9211374817586335, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 112/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [111][ 0/60]	Loss 2.6651e-02 (2.6651e-02)
+Epoch: [111][25/60]	Loss 3.9123e-02 (4.1170e-02)
+Epoch: [111][50/60]	Loss 3.8778e-02 (4.3366e-02)
+Evaluate ...
+{'ACC': 0.9331, 'ARI': 0.8784015153724286, 'NMI': 0.9178544162685813, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 113/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [112][ 0/60]	Loss 3.2775e-02 (3.2775e-02)
+Epoch: [112][25/60]	Loss 3.7749e-02 (4.1620e-02)
+Epoch: [112][50/60]	Loss 4.5939e-02 (4.3527e-02)
+Evaluate ...
+{'ACC': 0.9292, 'ARI': 0.8736115009178326, 'NMI': 0.914647549155684, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 114/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [113][ 0/60]	Loss 6.6452e-02 (6.6452e-02)
+Epoch: [113][25/60]	Loss 5.1204e-02 (4.9676e-02)
+Epoch: [113][50/60]	Loss 4.3077e-02 (4.7090e-02)
+Evaluate ...
+{'ACC': 0.8952, 'ARI': 0.8358920078268938, 'NMI': 0.8981827252097191, 'ACC Top-5': 0.9987, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 115/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [114][ 0/60]	Loss 5.7796e-02 (5.7796e-02)
+Epoch: [114][25/60]	Loss 4.8710e-02 (5.0729e-02)
+Epoch: [114][50/60]	Loss 3.9065e-02 (5.0099e-02)
+Evaluate ...
+{'ACC': 0.9146, 'ARI': 0.8575834314387276, 'NMI': 0.9074815382704519, 'ACC Top-5': 0.9942, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 116/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [115][ 0/60]	Loss 5.6921e-02 (5.6921e-02)
+Epoch: [115][25/60]	Loss 4.3519e-02 (4.8902e-02)
+Epoch: [115][50/60]	Loss 4.0050e-02 (4.8724e-02)
+Evaluate ...
+{'ACC': 0.9376, 'ARI': 0.8844423777298936, 'NMI': 0.9207609240970741, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 117/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [116][ 0/60]	Loss 3.1052e-02 (3.1052e-02)
+Epoch: [116][25/60]	Loss 3.2008e-02 (4.2286e-02)
+Epoch: [116][50/60]	Loss 4.4876e-02 (4.4668e-02)
+Evaluate ...
+{'ACC': 0.8986, 'ARI': 0.8370974198870947, 'NMI': 0.896420279797239, 'ACC Top-5': 0.9991, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 118/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [117][ 0/60]	Loss 3.2815e-02 (3.2815e-02)
+Epoch: [117][25/60]	Loss 4.9727e-02 (4.8474e-02)
+Epoch: [117][50/60]	Loss 5.8693e-02 (4.9175e-02)
+Evaluate ...
+{'ACC': 0.917, 'ARI': 0.8561497431294149, 'NMI': 0.9057211299692232, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 119/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [118][ 0/60]	Loss 6.7238e-02 (6.7238e-02)
+Epoch: [118][25/60]	Loss 4.5095e-02 (4.7020e-02)
+Epoch: [118][50/60]	Loss 4.3750e-02 (4.5093e-02)
+Evaluate ...
+{'ACC': 0.9275, 'ARI': 0.8695011027493096, 'NMI': 0.910317259339779, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 120/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [119][ 0/60]	Loss 3.7993e-02 (3.7993e-02)
+Epoch: [119][25/60]	Loss 5.2464e-02 (4.4289e-02)
+Epoch: [119][50/60]	Loss 3.5187e-02 (4.5211e-02)
+Evaluate ...
+{'ACC': 0.9282, 'ARI': 0.8698008849444623, 'NMI': 0.9113230097858775, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 121/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [120][ 0/60]	Loss 3.0346e-02 (3.0346e-02)
+Epoch: [120][25/60]	Loss 4.3755e-02 (4.5263e-02)
+Epoch: [120][50/60]	Loss 4.1431e-02 (4.3935e-02)
+Evaluate ...
+{'ACC': 0.9333, 'ARI': 0.8767746385496479, 'NMI': 0.9144678653713022, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 122/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [121][ 0/60]	Loss 4.3301e-02 (4.3301e-02)
+Epoch: [121][25/60]	Loss 6.0422e-02 (4.4077e-02)
+Epoch: [121][50/60]	Loss 3.4815e-02 (4.4885e-02)
+Evaluate ...
+{'ACC': 0.9083, 'ARI': 0.8475984775824789, 'NMI': 0.9013578532931174, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 123/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [122][ 0/60]	Loss 6.4928e-02 (6.4928e-02)
+Epoch: [122][25/60]	Loss 4.5793e-02 (4.6109e-02)
+Epoch: [122][50/60]	Loss 2.7673e-02 (4.7769e-02)
+Evaluate ...
+{'ACC': 0.8846, 'ARI': 0.8080070026432933, 'NMI': 0.8777079786877091, 'ACC Top-5': 0.9985, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 124/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [123][ 0/60]	Loss 8.7049e-02 (8.7049e-02)
+Epoch: [123][25/60]	Loss 5.3730e-02 (4.9087e-02)
+Epoch: [123][50/60]	Loss 4.2975e-02 (5.0324e-02)
+Evaluate ...
+{'ACC': 0.9009, 'ARI': 0.8388094285645559, 'NMI': 0.8975610028348404, 'ACC Top-5': 0.9997, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 125/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [124][ 0/60]	Loss 7.2767e-02 (7.2767e-02)
+Epoch: [124][25/60]	Loss 4.0412e-02 (4.8558e-02)
+Epoch: [124][50/60]	Loss 6.5912e-02 (4.8784e-02)
+Evaluate ...
+{'ACC': 0.9032, 'ARI': 0.841900527084768, 'NMI': 0.9018430121017024, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 126/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [125][ 0/60]	Loss 5.5610e-02 (5.5610e-02)
+Epoch: [125][25/60]	Loss 6.3592e-02 (4.9671e-02)
+Epoch: [125][50/60]	Loss 7.1870e-02 (4.8661e-02)
+Evaluate ...
+{'ACC': 0.8923, 'ARI': 0.8334814541463574, 'NMI': 0.8982759379777743, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 127/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [126][ 0/60]	Loss 5.1949e-02 (5.1949e-02)
+Epoch: [126][25/60]	Loss 3.8265e-02 (5.1141e-02)
+Epoch: [126][50/60]	Loss 5.5423e-02 (5.0162e-02)
+Evaluate ...
+{'ACC': 0.9027, 'ARI': 0.8416001649855883, 'NMI': 0.9010626058269815, 'ACC Top-5': 0.9983, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 128/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [127][ 0/60]	Loss 6.0546e-02 (6.0546e-02)
+Epoch: [127][25/60]	Loss 4.1816e-02 (4.9701e-02)
+Epoch: [127][50/60]	Loss 6.4234e-02 (5.1517e-02)
+Evaluate ...
+{'ACC': 0.8911, 'ARI': 0.8337279884887868, 'NMI': 0.8981445104580348, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 129/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [128][ 0/60]	Loss 3.8682e-02 (3.8682e-02)
+Epoch: [128][25/60]	Loss 4.6482e-02 (4.5341e-02)
+Epoch: [128][50/60]	Loss 3.5728e-02 (4.6821e-02)
+Evaluate ...
+{'ACC': 0.8957, 'ARI': 0.8354731734626135, 'NMI': 0.8969390670060536, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 130/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [129][ 0/60]	Loss 6.0461e-02 (6.0461e-02)
+Epoch: [129][25/60]	Loss 4.4331e-02 (4.9853e-02)
+Epoch: [129][50/60]	Loss 5.5351e-02 (5.0028e-02)
+Evaluate ...
+{'ACC': 0.8839, 'ARI': 0.8299572440429308, 'NMI': 0.8975300192439951, 'ACC Top-5': 0.9983, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 131/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [130][ 0/60]	Loss 5.1839e-02 (5.1839e-02)
+Epoch: [130][25/60]	Loss 5.5707e-02 (5.0206e-02)
+Epoch: [130][50/60]	Loss 4.8488e-02 (4.9570e-02)
+Evaluate ...
+{'ACC': 0.8893, 'ARI': 0.8290379627589212, 'NMI': 0.8942430438671697, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 132/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [131][ 0/60]	Loss 4.4879e-02 (4.4879e-02)
+Epoch: [131][25/60]	Loss 6.0117e-02 (4.7584e-02)
+Epoch: [131][50/60]	Loss 5.1916e-02 (4.8941e-02)
+Evaluate ...
+{'ACC': 0.8986, 'ARI': 0.8353066185737249, 'NMI': 0.8954552293182014, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 133/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [132][ 0/60]	Loss 5.0854e-02 (5.0854e-02)
+Epoch: [132][25/60]	Loss 4.3937e-02 (4.7443e-02)
+Epoch: [132][50/60]	Loss 5.3543e-02 (4.9630e-02)
+Evaluate ...
+{'ACC': 0.8977, 'ARI': 0.8295914913004699, 'NMI': 0.8911055737228571, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 134/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [133][ 0/60]	Loss 5.4650e-02 (5.4650e-02)
+Epoch: [133][25/60]	Loss 7.1675e-02 (4.9904e-02)
+Epoch: [133][50/60]	Loss 3.4178e-02 (4.9534e-02)
+Evaluate ...
+{'ACC': 0.8768, 'ARI': 0.7913797936223359, 'NMI': 0.8723386690177433, 'ACC Top-5': 0.9963, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 135/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [134][ 0/60]	Loss 4.4916e-02 (4.4916e-02)
+Epoch: [134][25/60]	Loss 4.2524e-02 (5.3895e-02)
+Epoch: [134][50/60]	Loss 5.8024e-02 (5.2634e-02)
+Evaluate ...
+{'ACC': 0.8937, 'ARI': 0.8078207099701971, 'NMI': 0.8801951683225661, 'ACC Top-5': 0.9956, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 136/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [135][ 0/60]	Loss 4.7597e-02 (4.7597e-02)
+Epoch: [135][25/60]	Loss 5.6341e-02 (5.1204e-02)
+Epoch: [135][50/60]	Loss 4.4155e-02 (5.0058e-02)
+Evaluate ...
+{'ACC': 0.8733, 'ARI': 0.7931876002485017, 'NMI': 0.8738635978353151, 'ACC Top-5': 0.9979, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 137/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [136][ 0/60]	Loss 5.4716e-02 (5.4716e-02)
+Epoch: [136][25/60]	Loss 4.8804e-02 (5.0076e-02)
+Epoch: [136][50/60]	Loss 3.6554e-02 (5.1204e-02)
+Evaluate ...
+{'ACC': 0.8785, 'ARI': 0.8095679976295641, 'NMI': 0.8822919365505264, 'ACC Top-5': 0.9987, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 138/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [137][ 0/60]	Loss 7.4272e-02 (7.4272e-02)
+Epoch: [137][25/60]	Loss 6.2208e-02 (5.1227e-02)
+Epoch: [137][50/60]	Loss 5.3689e-02 (5.2626e-02)
+Evaluate ...
+{'ACC': 0.8903, 'ARI': 0.831817706185392, 'NMI': 0.8951129901004438, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 139/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [138][ 0/60]	Loss 5.5234e-02 (5.5234e-02)
+Epoch: [138][25/60]	Loss 5.2229e-02 (4.7568e-02)
+Epoch: [138][50/60]	Loss 4.9945e-02 (4.7527e-02)
+Evaluate ...
+{'ACC': 0.9022, 'ARI': 0.8400829946445754, 'NMI': 0.8975280514013019, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 140/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [139][ 0/60]	Loss 3.6381e-02 (3.6381e-02)
+Epoch: [139][25/60]	Loss 5.1888e-02 (4.7828e-02)
+Epoch: [139][50/60]	Loss 5.9572e-02 (4.6147e-02)
+Evaluate ...
+{'ACC': 0.9109, 'ARI': 0.8474173979371203, 'NMI': 0.8995940355038583, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 141/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [140][ 0/60]	Loss 5.6740e-02 (5.6740e-02)
+Epoch: [140][25/60]	Loss 5.0005e-02 (4.5770e-02)
+Epoch: [140][50/60]	Loss 4.9310e-02 (4.6040e-02)
+Evaluate ...
+{'ACC': 0.902, 'ARI': 0.839461370046726, 'NMI': 0.8975998160289985, 'ACC Top-5': 0.9991, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 142/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [141][ 0/60]	Loss 3.5166e-02 (3.5166e-02)
+Epoch: [141][25/60]	Loss 6.4507e-02 (4.6759e-02)
+Epoch: [141][50/60]	Loss 6.2582e-02 (4.3677e-02)
+Evaluate ...
+{'ACC': 0.8816, 'ARI': 0.821965258283427, 'NMI': 0.8899768231462802, 'ACC Top-5': 0.9947, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 143/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [142][ 0/60]	Loss 5.0261e-02 (5.0261e-02)
+Epoch: [142][25/60]	Loss 4.4683e-02 (4.8954e-02)
+Epoch: [142][50/60]	Loss 4.3547e-02 (5.0479e-02)
+Evaluate ...
+{'ACC': 0.9039, 'ARI': 0.8391647467002045, 'NMI': 0.8946950186823636, 'ACC Top-5': 0.9998, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 144/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [143][ 0/60]	Loss 3.9070e-02 (3.9070e-02)
+Epoch: [143][25/60]	Loss 5.4012e-02 (4.8690e-02)
+Epoch: [143][50/60]	Loss 3.0004e-02 (4.3828e-02)
+Evaluate ...
+{'ACC': 0.9414, 'ARI': 0.8901202448938196, 'NMI': 0.9238415325357998, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 145/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [144][ 0/60]	Loss 5.1806e-02 (5.1806e-02)
+Epoch: [144][25/60]	Loss 5.3150e-02 (4.9312e-02)
+Epoch: [144][50/60]	Loss 5.9822e-02 (4.5539e-02)
+Evaluate ...
+{'ACC': 0.937, 'ARI': 0.8814181206952177, 'NMI': 0.9158690743605774, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 146/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [145][ 0/60]	Loss 3.7338e-02 (3.7338e-02)
+Epoch: [145][25/60]	Loss 3.4421e-02 (4.7206e-02)
+Epoch: [145][50/60]	Loss 4.7004e-02 (4.4501e-02)
+Evaluate ...
+{'ACC': 0.9322, 'ARI': 0.8755219718861865, 'NMI': 0.9135306273153164, 'ACC Top-5': 0.9995, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 147/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [146][ 0/60]	Loss 4.2339e-02 (4.2339e-02)
+Epoch: [146][25/60]	Loss 5.0518e-02 (4.5286e-02)
+Epoch: [146][50/60]	Loss 4.7460e-02 (4.5975e-02)
+Evaluate ...
+{'ACC': 0.9072, 'ARI': 0.8402845160645408, 'NMI': 0.896554262063598, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 148/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [147][ 0/60]	Loss 3.5906e-02 (3.5906e-02)
+Epoch: [147][25/60]	Loss 2.8341e-02 (5.0487e-02)
+Epoch: [147][50/60]	Loss 5.8869e-02 (4.9453e-02)
+Evaluate ...
+{'ACC': 0.8896, 'ARI': 0.8241323139211656, 'NMI': 0.8891151646870438, 'ACC Top-5': 0.9989, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 149/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [148][ 0/60]	Loss 6.9493e-02 (6.9493e-02)
+Epoch: [148][25/60]	Loss 3.8429e-02 (4.8630e-02)
+Epoch: [148][50/60]	Loss 4.6810e-02 (5.0280e-02)
+Evaluate ...
+{'ACC': 0.8787, 'ARI': 0.8005664596482817, 'NMI': 0.8768622600439515, 'ACC Top-5': 0.9975, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 150/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [149][ 0/60]	Loss 4.0876e-02 (4.0876e-02)
+Epoch: [149][25/60]	Loss 3.7398e-02 (4.7932e-02)
+Epoch: [149][50/60]	Loss 4.6824e-02 (5.0840e-02)
+Evaluate ...
+{'ACC': 0.8949, 'ARI': 0.8325147227818851, 'NMI': 0.8934772723476679, 'ACC Top-5': 0.9986, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 151/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [150][ 0/60]	Loss 4.1392e-02 (4.1392e-02)
+Epoch: [150][25/60]	Loss 5.6589e-02 (4.7693e-02)
+Epoch: [150][50/60]	Loss 6.3015e-02 (4.8602e-02)
+Evaluate ...
+{'ACC': 0.8873, 'ARI': 0.8297573697006515, 'NMI': 0.8956863327491987, 'ACC Top-5': 0.9989, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 152/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [151][ 0/60]	Loss 5.1143e-02 (5.1143e-02)
+Epoch: [151][25/60]	Loss 3.5148e-02 (5.1866e-02)
+Epoch: [151][50/60]	Loss 3.0135e-02 (5.2231e-02)
+Evaluate ...
+{'ACC': 0.9064, 'ARI': 0.8446281274617378, 'NMI': 0.9013139065106576, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 153/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [152][ 0/60]	Loss 5.0448e-02 (5.0448e-02)
+Epoch: [152][25/60]	Loss 4.5136e-02 (4.9379e-02)
+Epoch: [152][50/60]	Loss 7.5244e-02 (4.8718e-02)
+Evaluate ...
+{'ACC': 0.9025, 'ARI': 0.8397134782741759, 'NMI': 0.8988193757914794, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 154/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [153][ 0/60]	Loss 4.2367e-02 (4.2367e-02)
+Epoch: [153][25/60]	Loss 5.5780e-02 (4.9796e-02)
+Epoch: [153][50/60]	Loss 4.1675e-02 (4.8450e-02)
+Evaluate ...
+{'ACC': 0.903, 'ARI': 0.8422034938286523, 'NMI': 0.9005921331430644, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 155/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [154][ 0/60]	Loss 3.1542e-02 (3.1542e-02)
+Epoch: [154][25/60]	Loss 6.5759e-02 (4.9963e-02)
+Epoch: [154][50/60]	Loss 4.4341e-02 (4.9503e-02)
+Evaluate ...
+{'ACC': 0.9008, 'ARI': 0.8410709883873347, 'NMI': 0.900402397953414, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 156/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [155][ 0/60]	Loss 2.8479e-02 (2.8479e-02)
+Epoch: [155][25/60]	Loss 5.5488e-02 (4.6984e-02)
+Epoch: [155][50/60]	Loss 5.3212e-02 (4.7619e-02)
+Evaluate ...
+{'ACC': 0.9034, 'ARI': 0.8441356467271719, 'NMI': 0.9024647543888502, 'ACC Top-5': 0.9969, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 157/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [156][ 0/60]	Loss 5.6110e-02 (5.6110e-02)
+Epoch: [156][25/60]	Loss 5.1186e-02 (4.9273e-02)
+Epoch: [156][50/60]	Loss 6.2488e-02 (4.9955e-02)
+Evaluate ...
+{'ACC': 0.9066, 'ARI': 0.8451002163893924, 'NMI': 0.901943530853916, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 158/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [157][ 0/60]	Loss 4.0121e-02 (4.0121e-02)
+Epoch: [157][25/60]	Loss 4.9819e-02 (4.6945e-02)
+Epoch: [157][50/60]	Loss 3.6985e-02 (4.7286e-02)
+Evaluate ...
+{'ACC': 0.9023, 'ARI': 0.8426529787906618, 'NMI': 0.8997452392429555, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 159/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [158][ 0/60]	Loss 3.4274e-02 (3.4274e-02)
+Epoch: [158][25/60]	Loss 6.4234e-02 (4.5170e-02)
+Epoch: [158][50/60]	Loss 3.9446e-02 (4.3963e-02)
+Evaluate ...
+{'ACC': 0.9022, 'ARI': 0.842134267801617, 'NMI': 0.9017093071526079, 'ACC Top-5': 0.9988, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 160/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [159][ 0/60]	Loss 4.6794e-02 (4.6794e-02)
+Epoch: [159][25/60]	Loss 7.2227e-02 (4.8327e-02)
+Epoch: [159][50/60]	Loss 4.7829e-02 (4.8402e-02)
+Evaluate ...
+{'ACC': 0.8971, 'ARI': 0.8392908543900799, 'NMI': 0.9003023309089163, 'ACC Top-5': 0.9891, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 161/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [160][ 0/60]	Loss 2.9478e-02 (2.9478e-02)
+Epoch: [160][25/60]	Loss 3.5071e-02 (4.4751e-02)
+Epoch: [160][50/60]	Loss 3.6883e-02 (4.5368e-02)
+Evaluate ...
+{'ACC': 0.9107, 'ARI': 0.8503317094359901, 'NMI': 0.904929052214858, 'ACC Top-5': 0.9978, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 162/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [161][ 0/60]	Loss 6.5367e-02 (6.5367e-02)
+Epoch: [161][25/60]	Loss 4.7550e-02 (4.7805e-02)
+Epoch: [161][50/60]	Loss 3.8836e-02 (4.6941e-02)
+Evaluate ...
+{'ACC': 0.905, 'ARI': 0.8429276623538178, 'NMI': 0.9008895044570606, 'ACC Top-5': 0.9977, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 163/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [162][ 0/60]	Loss 5.0602e-02 (5.0602e-02)
+Epoch: [162][25/60]	Loss 4.2201e-02 (4.7643e-02)
+Epoch: [162][50/60]	Loss 4.8596e-02 (4.8125e-02)
+Evaluate ...
+{'ACC': 0.917, 'ARI': 0.8560746085301734, 'NMI': 0.9050334435215106, 'ACC Top-5': 0.9967, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 164/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [163][ 0/60]	Loss 6.4802e-02 (6.4802e-02)
+Epoch: [163][25/60]	Loss 6.2259e-02 (4.8004e-02)
+Epoch: [163][50/60]	Loss 5.1941e-02 (4.6880e-02)
+Evaluate ...
+{'ACC': 0.9102, 'ARI': 0.8486569498702375, 'NMI': 0.9025469021836108, 'ACC Top-5': 0.9986, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 165/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [164][ 0/60]	Loss 6.6514e-02 (6.6514e-02)
+Epoch: [164][25/60]	Loss 5.1433e-02 (4.5660e-02)
+Epoch: [164][50/60]	Loss 4.1601e-02 (4.5124e-02)
+Evaluate ...
+{'ACC': 0.9036, 'ARI': 0.8443271357124197, 'NMI': 0.9020645409663218, 'ACC Top-5': 0.9952, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 166/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [165][ 0/60]	Loss 3.7561e-02 (3.7561e-02)
+Epoch: [165][25/60]	Loss 5.0715e-02 (4.5429e-02)
+Epoch: [165][50/60]	Loss 2.2795e-02 (4.2410e-02)
+Evaluate ...
+{'ACC': 0.9339, 'ARI': 0.8768117048148041, 'NMI': 0.9161858038336059, 'ACC Top-5': 0.9986, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 167/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [166][ 0/60]	Loss 3.6508e-02 (3.6508e-02)
+Epoch: [166][25/60]	Loss 3.9545e-02 (4.0447e-02)
+Epoch: [166][50/60]	Loss 5.0059e-02 (4.2919e-02)
+Evaluate ...
+{'ACC': 0.9187, 'ARI': 0.8582174529700064, 'NMI': 0.9083468725570636, 'ACC Top-5': 0.9983, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 168/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [167][ 0/60]	Loss 3.7712e-02 (3.7712e-02)
+Epoch: [167][25/60]	Loss 4.0774e-02 (4.4699e-02)
+Epoch: [167][50/60]	Loss 4.7756e-02 (4.4227e-02)
+Evaluate ...
+{'ACC': 0.9517, 'ARI': 0.9053749930457793, 'NMI': 0.9322961185579495, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 169/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [168][ 0/60]	Loss 4.2952e-02 (4.2952e-02)
+Epoch: [168][25/60]	Loss 4.3638e-02 (4.5398e-02)
+Epoch: [168][50/60]	Loss 4.4786e-02 (4.3786e-02)
+Evaluate ...
+{'ACC': 0.9418, 'ARI': 0.8920084038185294, 'NMI': 0.9271821488792651, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 170/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [169][ 0/60]	Loss 3.7477e-02 (3.7477e-02)
+Epoch: [169][25/60]	Loss 4.7153e-02 (4.9334e-02)
+Epoch: [169][50/60]	Loss 3.7816e-02 (4.5922e-02)
+Evaluate ...
+{'ACC': 0.945, 'ARI': 0.8950165842733546, 'NMI': 0.9267640296009241, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 171/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [170][ 0/60]	Loss 4.9483e-02 (4.9483e-02)
+Epoch: [170][25/60]	Loss 3.7798e-02 (4.3015e-02)
+Epoch: [170][50/60]	Loss 4.4133e-02 (4.1417e-02)
+Evaluate ...
+{'ACC': 0.9376, 'ARI': 0.8857748862477638, 'NMI': 0.9230324668483516, 'ACC Top-5': 0.9984, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 172/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [171][ 0/60]	Loss 5.2156e-02 (5.2156e-02)
+Epoch: [171][25/60]	Loss 6.7196e-02 (4.4621e-02)
+Epoch: [171][50/60]	Loss 3.7406e-02 (4.4432e-02)
+Evaluate ...
+{'ACC': 0.9422, 'ARI': 0.8922146746017361, 'NMI': 0.9259727736374239, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 173/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [172][ 0/60]	Loss 2.4205e-02 (2.4205e-02)
+Epoch: [172][25/60]	Loss 5.2175e-02 (4.2549e-02)
+Epoch: [172][50/60]	Loss 4.4870e-02 (4.3662e-02)
+Evaluate ...
+{'ACC': 0.9365, 'ARI': 0.8842175409007952, 'NMI': 0.9219776599534976, 'ACC Top-5': 0.9987, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 174/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [173][ 0/60]	Loss 6.7175e-02 (6.7175e-02)
+Epoch: [173][25/60]	Loss 4.9472e-02 (4.6360e-02)
+Epoch: [173][50/60]	Loss 3.5449e-02 (4.4707e-02)
+Evaluate ...
+{'ACC': 0.9305, 'ARI': 0.8745196700193444, 'NMI': 0.9160836393137585, 'ACC Top-5': 0.9986, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 175/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [174][ 0/60]	Loss 5.9091e-02 (5.9091e-02)
+Epoch: [174][25/60]	Loss 4.0052e-02 (4.7242e-02)
+Epoch: [174][50/60]	Loss 5.7165e-02 (4.6422e-02)
+Evaluate ...
+{'ACC': 0.9331, 'ARI': 0.8806826839053711, 'NMI': 0.921386797697121, 'ACC Top-5': 0.9986, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 176/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [175][ 0/60]	Loss 3.1523e-02 (3.1523e-02)
+Epoch: [175][25/60]	Loss 3.4402e-02 (4.1563e-02)
+Epoch: [175][50/60]	Loss 4.3052e-02 (4.3246e-02)
+Evaluate ...
+{'ACC': 0.9173, 'ARI': 0.8600366070518589, 'NMI': 0.9098643991056269, 'ACC Top-5': 0.999, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 177/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [176][ 0/60]	Loss 6.2892e-02 (6.2892e-02)
+Epoch: [176][25/60]	Loss 3.7291e-02 (4.5093e-02)
+Epoch: [176][50/60]	Loss 3.7698e-02 (4.2863e-02)
+Evaluate ...
+{'ACC': 0.9295, 'ARI': 0.8744699185290176, 'NMI': 0.9170673713596084, 'ACC Top-5': 0.9995, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 178/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [177][ 0/60]	Loss 5.5639e-02 (5.5639e-02)
+Epoch: [177][25/60]	Loss 7.5402e-02 (4.5502e-02)
+Epoch: [177][50/60]	Loss 3.1983e-02 (4.5819e-02)
+Evaluate ...
+{'ACC': 0.9232, 'ARI': 0.8642990053883649, 'NMI': 0.9107616700135636, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 179/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [178][ 0/60]	Loss 3.3424e-02 (3.3424e-02)
+Epoch: [178][25/60]	Loss 3.6444e-02 (4.5640e-02)
+Epoch: [178][50/60]	Loss 7.1979e-02 (4.5088e-02)
+Evaluate ...
+{'ACC': 0.9413, 'ARI': 0.8902592429326487, 'NMI': 0.9240263877815644, 'ACC Top-5': 0.9991, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 180/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [179][ 0/60]	Loss 3.7912e-02 (3.7912e-02)
+Epoch: [179][25/60]	Loss 5.5193e-02 (4.3629e-02)
+Epoch: [179][50/60]	Loss 2.4234e-02 (4.4443e-02)
+Evaluate ...
+{'ACC': 0.9409, 'ARI': 0.8894600997211148, 'NMI': 0.9236267862232215, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 181/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [180][ 0/60]	Loss 5.9884e-02 (5.9884e-02)
+Epoch: [180][25/60]	Loss 5.5574e-02 (4.5343e-02)
+Epoch: [180][50/60]	Loss 4.8836e-02 (4.3408e-02)
+Evaluate ...
+{'ACC': 0.9343, 'ARI': 0.8791700474045674, 'NMI': 0.9172887233951844, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 182/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [181][ 0/60]	Loss 3.1383e-02 (3.1383e-02)
+Epoch: [181][25/60]	Loss 3.7476e-02 (4.3109e-02)
+Epoch: [181][50/60]	Loss 5.8250e-02 (4.4134e-02)
+Evaluate ...
+{'ACC': 0.913, 'ARI': 0.8523521694924939, 'NMI': 0.9051577118532048, 'ACC Top-5': 0.9991, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 183/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [182][ 0/60]	Loss 4.5778e-02 (4.5778e-02)
+Epoch: [182][25/60]	Loss 4.1930e-02 (4.7489e-02)
+Epoch: [182][50/60]	Loss 5.2372e-02 (4.6265e-02)
+Evaluate ...
+{'ACC': 0.922, 'ARI': 0.8618264124980944, 'NMI': 0.9095171412383876, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 184/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [183][ 0/60]	Loss 4.5946e-02 (4.5946e-02)
+Epoch: [183][25/60]	Loss 5.6007e-02 (4.8326e-02)
+Epoch: [183][50/60]	Loss 6.0792e-02 (4.6799e-02)
+Evaluate ...
+{'ACC': 0.9353, 'ARI': 0.8816231899799999, 'NMI': 0.9199186878448496, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 185/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [184][ 0/60]	Loss 6.4927e-02 (6.4927e-02)
+Epoch: [184][25/60]	Loss 7.9042e-02 (4.9654e-02)
+Epoch: [184][50/60]	Loss 5.7882e-02 (4.6829e-02)
+Evaluate ...
+{'ACC': 0.9386, 'ARI': 0.8866202786596762, 'NMI': 0.9220995250745716, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 186/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [185][ 0/60]	Loss 4.7766e-02 (4.7766e-02)
+Epoch: [185][25/60]	Loss 2.3733e-02 (4.0150e-02)
+Epoch: [185][50/60]	Loss 4.5077e-02 (4.1838e-02)
+Evaluate ...
+{'ACC': 0.9389, 'ARI': 0.8870967307191929, 'NMI': 0.9239044663786243, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 187/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [186][ 0/60]	Loss 4.1669e-02 (4.1669e-02)
+Epoch: [186][25/60]	Loss 3.7413e-02 (4.1396e-02)
+Epoch: [186][50/60]	Loss 5.2376e-02 (4.3815e-02)
+Evaluate ...
+{'ACC': 0.9306, 'ARI': 0.8742334502798436, 'NMI': 0.9161497104419427, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 188/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [187][ 0/60]	Loss 4.8575e-02 (4.8575e-02)
+Epoch: [187][25/60]	Loss 4.1697e-02 (4.5645e-02)
+Epoch: [187][50/60]	Loss 3.3086e-02 (4.4865e-02)
+Evaluate ...
+{'ACC': 0.9218, 'ARI': 0.861850243606812, 'NMI': 0.9091121076991655, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 189/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [188][ 0/60]	Loss 3.7366e-02 (3.7366e-02)
+Epoch: [188][25/60]	Loss 4.2518e-02 (4.5673e-02)
+Epoch: [188][50/60]	Loss 3.8762e-02 (4.6437e-02)
+Evaluate ...
+{'ACC': 0.9231, 'ARI': 0.8641483364002549, 'NMI': 0.9108374940091055, 'ACC Top-5': 0.9998, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 190/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [189][ 0/60]	Loss 4.4575e-02 (4.4575e-02)
+Epoch: [189][25/60]	Loss 3.6921e-02 (4.3470e-02)
+Epoch: [189][50/60]	Loss 4.7775e-02 (4.6354e-02)
+Evaluate ...
+{'ACC': 0.916, 'ARI': 0.8549151154471659, 'NMI': 0.905511857145379, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 191/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [190][ 0/60]	Loss 4.9142e-02 (4.9142e-02)
+Epoch: [190][25/60]	Loss 4.2328e-02 (4.6346e-02)
+Epoch: [190][50/60]	Loss 3.7911e-02 (4.6510e-02)
+Evaluate ...
+{'ACC': 0.9399, 'ARI': 0.8861247220837346, 'NMI': 0.9206682373708901, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 192/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [191][ 0/60]	Loss 4.1329e-02 (4.1329e-02)
+Epoch: [191][25/60]	Loss 3.8374e-02 (4.2803e-02)
+Epoch: [191][50/60]	Loss 4.9215e-02 (4.4911e-02)
+Evaluate ...
+{'ACC': 0.9177, 'ARI': 0.8565712868829622, 'NMI': 0.9068995579744799, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 193/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [192][ 0/60]	Loss 6.1997e-02 (6.1997e-02)
+Epoch: [192][25/60]	Loss 4.5252e-02 (4.7393e-02)
+Epoch: [192][50/60]	Loss 2.6507e-02 (4.7169e-02)
+Evaluate ...
+{'ACC': 0.9219, 'ARI': 0.8636496557176406, 'NMI': 0.9119851306376765, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 194/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [193][ 0/60]	Loss 3.7676e-02 (3.7676e-02)
+Epoch: [193][25/60]	Loss 5.4686e-02 (4.4844e-02)
+Epoch: [193][50/60]	Loss 4.4370e-02 (4.3821e-02)
+Evaluate ...
+{'ACC': 0.94, 'ARI': 0.889148020374544, 'NMI': 0.9253104561400329, 'ACC Top-5': 0.9993, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 195/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [194][ 0/60]	Loss 3.1665e-02 (3.1665e-02)
+Epoch: [194][25/60]	Loss 3.9818e-02 (4.1072e-02)
+Epoch: [194][50/60]	Loss 3.8900e-02 (4.1047e-02)
+Evaluate ...
+{'ACC': 0.9468, 'ARI': 0.8972422577660346, 'NMI': 0.9256937491263931, 'ACC Top-5': 0.9995, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 196/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [195][ 0/60]	Loss 4.7116e-02 (4.7116e-02)
+Epoch: [195][25/60]	Loss 2.8460e-02 (4.0576e-02)
+Epoch: [195][50/60]	Loss 4.1369e-02 (4.2171e-02)
+Evaluate ...
+{'ACC': 0.9289, 'ARI': 0.8714911209492886, 'NMI': 0.9129789653504703, 'ACC Top-5': 0.9988, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 197/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [196][ 0/60]	Loss 4.5433e-02 (4.5433e-02)
+Epoch: [196][25/60]	Loss 6.5511e-02 (4.5010e-02)
+Epoch: [196][50/60]	Loss 2.8031e-02 (4.3665e-02)
+Evaluate ...
+{'ACC': 0.9394, 'ARI': 0.8846727419038553, 'NMI': 0.918662421385874, 'ACC Top-5': 0.9996, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 198/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [197][ 0/60]	Loss 4.5085e-02 (4.5085e-02)
+Epoch: [197][25/60]	Loss 3.9814e-02 (4.2390e-02)
+Epoch: [197][50/60]	Loss 4.6686e-02 (4.4609e-02)
+Evaluate ...
+{'ACC': 0.9446, 'ARI': 0.8932547015056179, 'NMI': 0.9241169564137708, 'ACC Top-5': 0.9994, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 199/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [198][ 0/60]	Loss 6.5258e-02 (6.5258e-02)
+Epoch: [198][25/60]	Loss 4.1911e-02 (4.0394e-02)
+Epoch: [198][50/60]	Loss 4.2201e-02 (4.3266e-02)
+Evaluate ...
+{'ACC': 0.924, 'ARI': 0.864647922164557, 'NMI': 0.910721902156357, 'ACC Top-5': 0.9983, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[33mEpoch 200/200[0m
+[33m----------[0m
+Adjusted learning rate to 0.00010
+Train ...
+Epoch: [199][ 0/60]	Loss 4.2767e-02 (4.2767e-02)
+Epoch: [199][25/60]	Loss 3.5194e-02 (4.7388e-02)
+Epoch: [199][50/60]	Loss 4.1342e-02 (4.6063e-02)
+Evaluate ...
+{'ACC': 0.9208, 'ARI': 0.8596361202979814, 'NMI': 0.907621550561979, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
+Checkpoint ...
+[34mEvaluate model at the end[0m
+{'ACC': 0.9208, 'ARI': 0.8596361202979814, 'NMI': 0.907621550561979, 'ACC Top-5': 0.9992, 'hungarian_match': [(0, 7), (1, 0), (2, 6), (3, 5), (4, 8), (5, 9), (6, 1), (7, 4), (8, 3), (9, 2)]}
